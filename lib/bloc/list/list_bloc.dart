@@ -12,12 +12,6 @@ class ListBloc extends Bloc<ListEvent, ListState> {
       if (event is GetListTop) {
         await eventEvents(event: event, emit: emit);
       }
-      if (event is GetListPoplar) {
-        await eventEventsPopular(event: event, emit: emit);
-      }
-      if (event is GetListPoplarTwo) {
-        await eventEventsPopularTwo(event: event, emit: emit);
-      }
     });
   }
 
@@ -29,27 +23,6 @@ class ListBloc extends Bloc<ListEvent, ListState> {
       emit(ListEmpty());
     }, (success) {
       emit(ListLoaded(success));
-    });
-  }
-
-  eventEventsPopular(
-      {required GetListPoplar event, required Emitter<ListState> emit}) async {
-    emit(ListLoadingPopular());
-    final response = await listUseCase.execute(TopRequest(page: event.page));
-    response.fold((failure) {
-      emit(ListEmpty());
-    }, (success) {
-      emit(ListLoadedPopular(success));
-    });
-  }
-  eventEventsPopularTwo(
-      {required GetListPoplarTwo event, required Emitter<ListState> emit}) async {
-    emit(ListLoadingPopularTWo());
-    final response = await listUseCase.execute(TopRequest(page: event.page));
-    response.fold((failure) {
-      emit(ListEmpty());
-    }, (success) {
-      emit(ListLoadedPopularTwo(success));
     });
   }
 }

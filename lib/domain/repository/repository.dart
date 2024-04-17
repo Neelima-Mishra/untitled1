@@ -4,6 +4,6 @@ import '../../data/request/request.dart';
 import '../models/list_model.dart';
 
 abstract class Repository {
-  Future<Either<Failure, List<TopData>>> getTopData(
+  Future<Either<Failure, ProfileData>> getTopData(
       TopRequest tourRequest);
 }

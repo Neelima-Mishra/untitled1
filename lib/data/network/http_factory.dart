@@ -26,12 +26,12 @@ class HTTPFactory {
       if (userModelData.accessToken!.isNotEmpty) {
         header = {
           accept: applicationJson,
-          "X-Desidime-Client": "08b4260e5585f282d1bd9d08Se743fd90",
+          "X-Desidime-Client": "08b4260e5585f282d1bd9d085e743fd9",
         };
       } else {
         header = {
           accept: applicationJson,
-          "X-Desidime-Client": "08b4260e5585f282d1bd9d08Se743fd90",
+          "X-Desidime-Client": "08b4260e5585f282d1bd9d085e743fd9",
         };
       }
       LoggerUtil.instance.printLog(msg: 'Get method url : $url');

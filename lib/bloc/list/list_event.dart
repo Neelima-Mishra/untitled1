@@ -12,11 +12,3 @@ class GetListTop extends ListEvent {
   final int page;
   const GetListTop({required this.page});
 }
-class GetListPoplar extends ListEvent {
-  final int page;
-  const GetListPoplar({required this.page});
-}
-class GetListPoplarTwo extends ListEvent {
-  final int page;
-  const GetListPoplarTwo({required this.page});
-}

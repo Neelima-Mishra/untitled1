@@ -5,11 +5,11 @@ import '../models/list_model.dart';
 import '../repository/repository.dart';
 import 'base_usecase.dart';
 
-class ListUseCase extends BaseUseCase<TopRequest, List<TopData>> {
+class ListUseCase extends BaseUseCase<TopRequest, ProfileData> {
   Repository repository;
   ListUseCase({required this.repository});
   @override
-  Future<Either<Failure, List<TopData>>> execute(TopRequest input) async {
+  Future<Either<Failure, ProfileData>> execute(TopRequest input) async {
     return await repository.getTopData(input);
   }
 }

@@ -13,7 +13,7 @@ class ListInitial extends ListState {}
 class ListLoading extends ListState {}
 
 class ListLoaded extends ListState {
-  final List<TopData> list;
+  final ProfileData list;
   const ListLoaded(this.list);
   @override
   List<Object?> get props => [list];
@@ -29,7 +29,7 @@ class ListError extends ListState {
 class ListLoadingPopular extends ListState {}
 
 class ListLoadedPopular extends ListState {
-  final List<TopData> list;
+  final ProfileData list;
   const ListLoadedPopular(this.list);
   @override
   List<Object?> get props => [list];
@@ -44,7 +44,7 @@ class ListErrorPopular extends ListState {
 class ListLoadingPopularTWo extends ListState {}
 
 class ListLoadedPopularTwo extends ListState {
-  final List<TopData> list;
+  final ProfileData list;
   const ListLoadedPopularTwo(this.list);
   @override
   List<Object?> get props => [list];

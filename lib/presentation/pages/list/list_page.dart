@@ -18,39 +18,59 @@ class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          listOfData(),
-        ],
-      ),
-    //   body: Stack(
-    //     children: [
-    //       BlocProvider(
-    //         create: (context) => _bloc..add(const GetListTop(page: 1)),
-    //         child: BlocConsumer<ListBloc, ListState>(
-    //           listener: (context, state) {},
-    //           builder: (context, state) {
-    //             if (state is ListInitial) {
-    //               return Container();
-    //             } else if (state is ListLoading) {
-    //               return fullscreenLoader();
-    //             } else if (state is ListLoaded) {
-    //               return Column(
-    //                 children: [
-    //                   listOfData(state.list),
-    //                 ],
-    //               );
-    //             } else if (state is ListEmpty) {
-    //               return noDataFound();
-    //             } else {
-    //               return Container();
-    //             }
-    //           },
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
+      body: BlocProvider(
+                 create: (context) => _bloc..add(const GetListTop(page: 1)),
+                 child: BlocConsumer<ListBloc, ListState>(
+                   listener: (context, state) {},
+                   builder: (context, state) {
+                     if (state is ListInitial) {
+                       return Container();
+                     } else if (state is ListLoading) {
+                       return fullscreenLoader();
+                     } else if (state is ListLoaded) {
+                       return SingleChildScrollView(
+                         child: Column(
+                           children: [
+                             listOfData(state.list.deals!),
+                           ],
+                         ),
+                       );
+                     } else if (state is ListEmpty) {
+                       return noDataFound();
+                     } else {
+                       return Container();
+                     }
+                   },
+                 ),
+        ),
+      //   body: Stack(
+      //     children: [
+      //       BlocProvider(
+      //         create: (context) => _bloc..add(const GetListTop(page: 1)),
+      //         child: BlocConsumer<ListBloc, ListState>(
+      //           listener: (context, state) {},
+      //           builder: (context, state) {
+      //             if (state is ListInitial) {
+      //               return Container();
+      //             } else if (state is ListLoading) {
+      //               return fullscreenLoader();
+      //             } else if (state is ListLoaded) {
+      //               return Column(
+      //                 children: [
+      //                   listOfData(state.list),
+      //                 ],
+      //               );
+      //             } else if (state is ListEmpty) {
+      //               return noDataFound();
+      //             } else {
+      //               return Container();
+      //             }
+      //           },
+      //         ),
+      //       )
+      //     ],
+      //   ),
+      // );
     );
   }
 
@@ -62,9 +82,10 @@ class ListPage extends StatelessWidget {
     );
   }
 
-  Widget listOfData(/*List<TopData> listNearBy*/) {
+  Widget listOfData(List<Deal> deals) {
     return ListView.builder(
       shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -72,61 +93,62 @@ class ListPage extends StatelessWidget {
             child: SizedBox(
               height: 170,
               width: double.infinity,
-              child: detailsOfRow(),
+              child: detailsOfRow(deals[index]),
             ),
           ),
         );
       },
-      itemCount: 1,
+      itemCount: deals.length,
     );
   }
 
 
-  Widget detailsOfRow(){
+  Widget detailsOfRow(Deal deals) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Row(
+         Row(
           children: [
             CommonImageAsset(
-              image: ImageManager.icLogo,
-              height: 40,
-              width: 40,
+              image: deals.imageMedium!,
+              height: 100,
+              width: 100,
             ),
-            Text("This  is Calling Api"),
+            Text(deals.store!=null?deals.store!.name!:""),
           ],
         ),
         const Spacer(),
         Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            iconDetails(),
+            iconDetails(deals),
           ],
         ),
       ],
     );
   }
 
-  Widget iconDetails(){
-    return  Padding(
+  Widget iconDetails(Deal deals) {
+    return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
           const Icon(Icons.thumb_up),
-          const Text("26"),
+           Text(deals.commentsCount.toString()),
           const Icon(Icons.message),
-          const Text("26"),
+           Text(deals.commentsCount.toString()),
           const Icon(Icons.alarm),
-          Text(DateFormat('dd-MMMM-yy').format(DateTime.now())),
+          Text(DateFormat('dd-MMMM-yy').format(deals.createdAt!)),
           const Spacer(),
           const InkWell(
-            child: Text("AtOther",style: TextStyle(color: Colors.blue),),
+            child: Text("AtOther", style: TextStyle(color: Colors.blue),),
           )
         ],
       ),
     );
   }
+
   Widget noDataFound() {
     return const Center(
       child: Text("No Data Found"),

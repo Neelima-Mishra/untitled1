@@ -13,83 +13,37 @@ class RepositoryImpl extends Repository {
   LocalDataSource localDataSource;
   NetworkInfo networkInfo;
 
-  RepositoryImpl(
-      {required this.remoteDataSource,
-      required this.localDataSource,
-      required this.networkInfo});
+  RepositoryImpl({required this.remoteDataSource,
+    required this.localDataSource,
+    required this.networkInfo});
 
   @override
-  Future<Either<Failure, List<TopData>>> getTopData(
+  Future<Either<Failure, ProfileData>> getTopData(
       TopRequest tourRequest) async {
     if (await networkInfo.isConnected) {
       try {
         final response = await remoteDataSource.getTop(tourRequest);
         Map<String, dynamic> responseJson = jsonDecode(response);
-        final responseData = TopListResponse.fromJson(responseJson);
-        if (responseData.status == 200) // success
-        {
-          await localDataSource.saveLoginDataPref(
-              response: jsonEncode(responseData.routes));
-          return Right(responseData.routes!);
-        } else {
-          return Left(Failure(response.statusCode,
-              responseData.message ?? ResponseMessage.defaults, false));
-        }
-      } catch (error) {
-        return (Left(AppExceptions.handle(error).failure));
-      }
-    } else {
-      return (Left(AppExceptions.handle("").failure));
-
-    }
-  }
-
-  Future<Either<Failure, List<TopData>>> getPopularData(
-      TopRequest tourRequest) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final response = await remoteDataSource.getTop(tourRequest);
-        Map<String, dynamic> responseJson = jsonDecode(response);
-        final responseData = TopListResponse.fromJson(responseJson);
-        if (responseData.status == 200) // success
+        final responseData = ProfileData.fromJson(responseJson);
+        if (responseData.seoSettings != null) // success
             {
           await localDataSource.saveLoginDataPref(
-              response: jsonEncode(responseData.routes));
-          return Right(responseData.routes!);
+              response: jsonEncode(responseData.deals));
+          return Right(responseData);
         } else {
           return Left(Failure(response.statusCode,
-              responseData.message ?? ResponseMessage.defaults, false));
+              responseData.seoSettings!.webUrl ?? ResponseMessage.defaults,
+              false));
         }
       } catch (error) {
-        return (Left(AppExceptions.handle(error).failure));
+        return (Left(AppExceptions
+            .handle(error)
+            .failure));
       }
     } else {
-      return (Left(AppExceptions.handle("").failure));
-
-    }
-  }
-  Future<Either<Failure, List<TopData>>> getValueData(
-      TopRequest tourRequest) async {
-    if (await networkInfo.isConnected) {
-      try {
-        final response = await remoteDataSource.getTop(tourRequest);
-        Map<String, dynamic> responseJson = jsonDecode(response);
-        final responseData = TopListResponse.fromJson(responseJson);
-        if (responseData.status == 200) // success
-            {
-          await localDataSource.saveLoginDataPref(
-              response: jsonEncode(responseData.routes));
-          return Right(responseData.routes!);
-        } else {
-          return Left(Failure(response.statusCode,
-              responseData.message ?? ResponseMessage.defaults, false));
-        }
-      } catch (error) {
-        return (Left(AppExceptions.handle(error).failure));
-      }
-    } else {
-      return (Left(AppExceptions.handle("").failure));
-
+      return (Left(AppExceptions
+          .handle("")
+          .failure));
     }
   }
 }

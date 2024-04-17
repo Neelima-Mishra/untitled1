@@ -23,6 +23,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.navigateRoute:
         initNavigationModule();
+        initHomeModule();
         return MaterialPageRoute(builder: (_) => const NavigationViewBar());
       default:
         return undefinedRoute();
